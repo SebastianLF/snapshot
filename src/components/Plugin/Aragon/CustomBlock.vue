@@ -36,6 +36,14 @@ export default {
     async execute(plugin) {
       this.loading = true;
       const action = new plugins[plugin]();
+      console.log('action:', action);
+      console.log('network:', this.web3.value.network.key);
+      console.log('web3:', this.$auth.web3);
+      console.log('space:', this.space);
+      console.log('spaceOptions id:', this.space.plugins[plugin]);
+      console.log('account:', this.proposal.plugins[plugin]);
+      console.log('proposalId:', this.id);
+      console.log('proposalOptions:', this.winningChoice);
       try {
         const tx = await action.action(
           this.web3.value.network.key,
@@ -46,10 +54,12 @@ export default {
           this.winningChoice
         );
         const receipt = await tx.wait();
+        console.log('tx: ', tx);
         console.log('Receipt', receipt);
         notify(['green', this.$t('notify.youDidIt')]);
       } catch (e) {
         console.error(e);
+        notify(['red', e]);
       }
       this.loading = false;
     }
